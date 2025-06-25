@@ -320,9 +320,14 @@ def build_vector_udf_endpoint(
 
         # Call the function with `cols` as the function parameters
         if cols and cols[0]:
-            out = func(*[x if m else x[0] for x, m in zip(cols, masks)])
+            result = func(*[x if m else x[0] for x, m in zip(cols, masks)])
         else:
-            out = func()
+            result = func()
+
+        if inspect.iscoroutine(result):
+            out = await result
+        else:
+            out = result
 
         # Single masked value
         if isinstance(out, Masked):
