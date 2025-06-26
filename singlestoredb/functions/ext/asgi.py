@@ -319,11 +319,11 @@ def build_vector_udf_endpoint(
         row_ids = array_cls(row_ids)
 
         # Call the function with `cols` as the function parameters
-        if cols and cols[0]:
-            out = func(*[x if m else x[0] for x, m in zip(cols, masks)])
+        if inspect.iscoroutinefunction(func):
+            out = await func(*[x if m else x[0] for x, m in zip(cols, masks)])
         else:
-            out = func()
-
+            out = await asyncio.to_thread(func, *[x if m else x[0] for x, m in zip(cols, masks)])
+            
         # Single masked value
         if isinstance(out, Masked):
             return row_ids, [tuple(out)]
