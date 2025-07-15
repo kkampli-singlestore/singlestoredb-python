@@ -3,6 +3,8 @@ name: Coverage tests
 on:
   schedule:
     - cron: "0 1 * * *"
+  schedule:
+    - cron: "0 1 * * *"
   workflow_dispatch:
 
 jobs:
@@ -23,8 +25,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-            fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
