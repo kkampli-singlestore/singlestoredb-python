@@ -61,7 +61,8 @@ async def run_udf_app(
     asyncio.create_task(_running_server.serve())
     await _running_server.wait_for_startup()
 
-    print(f'Python UDF registered at {base_url}')
+    if app_config.running_interactively:
+        print('started udf server')
 
     return UdfConnectionInfo(base_url, app.get_function_info())
 
